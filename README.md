@@ -308,9 +308,13 @@ ListViewAdapter mAdapter = new ListViewAdapter(this,mList);
         mRecycleView.setAdapter(mAdapter);
 ```
 可以看见，想要添加一种新模板类型相当简单，只需要：
-1）.定义相应的数据模型 实现IItemBean接口 ; 
+
+1）.定义相应的数据模型 实现IItemBean接口 ;
+
 2）.定义一个Provider绑定数据并返回布局；
+
 3）.使用adapter.add方法添加该Provider即可。
+
 扩展性非常强，以一种可插拔式的方式扩展或删除模板！
 
 4.其他主要方法
