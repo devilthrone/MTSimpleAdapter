@@ -6,8 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.devilthrone.MultiTemplateAdapter.adapter.ListViewAdapter;
-import com.devilthrone.MultiTemplateAdapter.bean.IItemBean;
+
+import com.devilthrone.MTSimpleAdapter.adapter.ListViewAdapter;
+import com.devilthrone.MTSimpleAdapter.bean.IItemBean;
 
 import java.util.ArrayList;
 import java.util.Collections;

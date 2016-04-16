@@ -2,8 +2,8 @@ package com.devilthrone.mtsimpleadapter;
 
 import android.content.Context;
 
-import com.devilthrone.MultiTemplateAdapter.provider.ViewProvider;
-import com.devilthrone.MultiTemplateAdapter.viewholder.ViewHolder;
+import com.devilthrone.MTSimpleAdapter.provider.ViewProvider;
+import com.devilthrone.MTSimpleAdapter.viewholder.ViewHolder;
 
 
 /**

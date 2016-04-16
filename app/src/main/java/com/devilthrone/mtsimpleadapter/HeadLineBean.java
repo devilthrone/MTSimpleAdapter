@@ -1,8 +1,8 @@
 package com.devilthrone.mtsimpleadapter;
 
 
-import com.devilthrone.MultiTemplateAdapter.bean.IItemBean;
-import com.devilthrone.MultiTemplateAdapter.provider.ViewProvider;
+import com.devilthrone.MTSimpleAdapter.bean.IItemBean;
+import com.devilthrone.MTSimpleAdapter.provider.ViewProvider;
 
 /**
  * Created by devilthrone on 16/4/3.

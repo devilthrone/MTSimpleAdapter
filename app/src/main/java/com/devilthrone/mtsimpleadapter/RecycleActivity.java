@@ -8,8 +8,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.devilthrone.MultiTemplateAdapter.adapter.RecyclerAdapter;
-import com.devilthrone.MultiTemplateAdapter.bean.IItemBean;
+
+import com.devilthrone.MTSimpleAdapter.adapter.RecyclerAdapter;
+import com.devilthrone.MTSimpleAdapter.bean.IItemBean;
 
 import java.util.ArrayList;
 import java.util.Collections;
