@@ -17,7 +17,8 @@ a Simple, powerful adapter for ListView,GridView or RecyclerView!
 
 
 通常的实现方式是：
-重写getViewTypeCount方法返回布局的类别数量
+重写getViewTypeCount方法返回布局的类别数量   
+
 重写getItemViewType(int）根据position返回不同的布局
 
 ```
@@ -116,12 +117,18 @@ a Simple, powerful adapter for ListView,GridView or RecyclerView!
     }
 ```
 
-上面的代码是聊天布局的常见写法。存在很多的缺点。
+上面的代码是聊天布局的常见写法。存在很多的缺点。  
+
  缺点如下：
+ 
  1.需要定义多个变量，用来标志不同的布局类型：  TYPE_RECEIVE收到的消息  TYPE_SEND发送的消息等等；
+ 
 2.如果布局很复杂，那么定义多个不同的ViewHolder来承载不同的布局。
+
 3.在getView方法和getItemViewType方法中，存在多个if else判断语句，结构混乱
+
 4.如果需要扩展，比如添加一种新布局，那么就需要重新定义一个ViewHolder ,在3中的两个方法里添加一个else分支。
+
 综上所述，上面的传统方法缺少灵活性，不易扩展，每次添加新类型都需要修改源码，不符合开闭原则——对修改关闭，对扩展开放。
 所以。噔噔噔噔！今天的主角粉墨登场！
 
@@ -148,7 +155,9 @@ Demo中实现效果如下图：
 --------
 
 1.编写Provider类  实现ViewProdiver接口
-在MTSimpleAdapter中，每一个Provider类对应着一种模板类型。
+ 
+在MTSimpleAdapter中，每一个Provider类对应着一种模板类型。   
+ 
 ViewProvider中有两个方法：
 
 > **bindView（Context context, ViewHolder viewHolder, int position, T item）**
@@ -197,6 +206,7 @@ public class HeadLineProvider implements ViewProvider<HeadLineBean> {
 ```
 
 2. javaBean继承IItemBean接口
+3. 
 数据模型需要继承IItemBean接口，并实现getViewProviderClass()方法，返回当前模型所对应的Provider
 
 > ConversationBean 会话数据模型
@@ -266,7 +276,7 @@ public class HeadLineBean implements IItemBean {
 > ListView  or  GridView
 
 ```
-mAdapter = new ProviderAdapter(this,mList);
+ListViewAdapter mAdapter = new ListViewAdapter(this,mList);
         mAdapter.addProvider(HeadLineProvider.class);
         mAdapter.addProvider(ConversationProvider.class);
         mListView.setAdapter(mAdapter);
@@ -275,7 +285,7 @@ mAdapter = new ProviderAdapter(this,mList);
 > RecyclerView
 
 ```
- mAdapter = new RecyclerAdapter(this,mList);
+ RecyclerAdapter mAdapter = new RecyclerAdapter(this,mList);
         mAdapter.addProvider(HeadLineProvider.class);
         mAdapter.addProvider(ConversationProvider.class);
         mRecycleView.setLayoutManager(new LinearLayoutManager(RecycleActivity.this));
@@ -309,7 +319,7 @@ MTSimpleAdapter中还封装了一些其他方法，用来简化针对数据以�
 > **addItemToHead**方法：添加一条数据到头部。可以用来实现HeadView
 > **remove**方法：移除一条数据
 
-好了！关于MTSimpleAdapter的介绍到此结束，github地址已在开头给出，下一篇打算介绍一下MTSimpleAdapter的框架结构和实现思路 敬请期待~O(∩_∩)O
+
 
 
 
