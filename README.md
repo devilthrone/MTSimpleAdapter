@@ -313,7 +313,7 @@ ListViewAdapter mAdapter = new ListViewAdapter(this,mList);
 
 2）.定义一个Provider绑定数据并返回布局；
 
-3）.使用adapter.add方法添加该Provider即可。
+3）.使用adapter.addProvider方法添加该Provider即可。
 
 扩展性非常强，以一种可插拔式的方式扩展或删除模板！
 
