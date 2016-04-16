@@ -313,10 +313,15 @@ ListViewAdapter mAdapter = new ListViewAdapter(this,mList);
 MTSimpleAdapter中还封装了一些其他方法，用来简化针对数据以及模板类别的操作：
 
 > **addProvider**方法：添加一种Provider模板类别
+
 > **removeProviderAndData**方法：删除一种Provider模板类别，并且同时删除该模板所对应的数据
+
 > **addItem**方法：添加一条数据
+
 > **addItems**方法：添加多条数据
+
 > **addItemToHead**方法：添加一条数据到头部。可以用来实现HeadView
+
 > **remove**方法：移除一条数据
 
 
