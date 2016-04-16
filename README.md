@@ -2,8 +2,11 @@
 a Simple, powerful adapter for ListView,GridView or RecyclerView!
 
 本文中的DEMO和library已上传到github: [https://github.com/devilthrone/MTSimpleAdapter](https://github.com/devilthrone/MTSimpleAdapter)
+
 本文相关博客地址：[http://blog.csdn.net/a253664942/article/details/51170066]
+
 欢迎fork and star O(∩_∩)O
+
 **需求背景**
 ----
 我们在Android开发中经常会遇到下列场景：一个ListView中需要展示多种不同的布局。例如：聊天界面、消息盒子等场景。
@@ -132,8 +135,10 @@ Demo中实现效果如下图：
 
 **集成方式**
 --------
-1.直接copy源码~ 
-2.引用jar文件  MTSimpleAdapter.jar已在github项目中给出
+1.直接copy源码~    
+
+2.引用jar文件  MTSimpleAdapter.jar已在github项目中给出   
+
 3.在Android studio中用gradle添加依赖,使用最新版本
 
 > compile 'com.devilthrone:MTSimpleAdapter:+'
