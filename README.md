@@ -13,10 +13,9 @@ a Simple, powerful adapter for ListView,GridView or RecyclerView!
 
 ![这里写图片描述](http://img.blog.csdn.net/20160416163956835)
 
-![这里写图片描述](http://img.blog.csdn.net/20160416164015960)
-
 
 通常的实现方式是：
+
 重写getViewTypeCount方法返回布局的类别数量   
 
 重写getItemViewType(int）根据position返回不同的布局
