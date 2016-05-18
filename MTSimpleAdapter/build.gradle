@@ -10,7 +10,7 @@ android {
             abortOnError false
         }
     defaultConfig {
-        minSdkVersion 19
+        minSdkVersion 8
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
@@ -34,7 +34,7 @@ publish {
     userOrg = '253664942'//bintray.com用户名
     groupId = 'com.devilthrone'//jcenter上的路径
     artifactId = 'MTSimpleAdapter'//项目名称
-    publishVersion = '1.0.3'//版本号
+    publishVersion = '1.0.4'//版本号
     desc = 'a Simple, powerful adapter for ListView,GridView or RecyclerView'
     website = 'https://github.com/devilthrone/MTSimpleAdapter'//
 }
