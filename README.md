@@ -220,6 +220,73 @@ ListViewAdapter mAdapter = new ListViewAdapter(this,mList);
 3）.使用adapter.addProvider方法添加该Provider即可。
 
 扩展性非常强，以一种可插拔式的方式扩展或删除模板！
+4.常用扩展特性：emptyView、loadingView、errorView
+通常，我们在使用ListView和RecyclerView的时候，经常有这三方面的需求：
+ 1. 当正在加载数据时，显示一个loading页面
+ 2. 当无数据时，显示一个空页面
+ 3. 当获取数据网络访问出错，显示一个错误页面
+ 
+ 因此，基于上述三方面的需求，MTSimpleAdapter做了一些常用扩展，简化了ListView和RecyclerView的开发流程，大大减少了代码量。
+
+**1. LoadingProvider(加载数据时的loading页面)**
+	 （1）创建LoadingProvider
+	 
+
+```
+public class LoadingProvider implements ViewProvider {
+    @Override
+    public void bindView(Context context, ViewHolder viewHolder, int position, IItemBean item) {
+
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.item_loading;
+    }
+}
+```
+其中R.layout.item_loading是loading页面的布局，这里简单起见 只要一个progress和一个textView显示正在加载。。。
+
+（2）在adapter中设置LoadingProvider
+
+```
+mAdapter.setLoadingProvider(LoadingProvider.class);
+        mListView.setAdapter(mAdapter);
+        mAdapter.setLoading(true);
+        initData();
+        mAdapter.setLoading(false);
+```
+通过ListViewAdapter和RecyclerAdapter的setLoadingProvider方法添加LoadingProvider，然后在获取数据前调用mAdapter.setLoading(true)来显示loading界面，在数据获取完成后调用mAdapter.setLoading(false)来隐藏loading界面即可。
+
+  **2. EmptyProvider(数据为空时的empty页面)**
+  
+  （1）创建EmptyProvider
+  
+
+```
+public class EmptyProvider implements ViewProvider {
+    @Override
+    public void bindView(Context context, ViewHolder viewHolder, int position, IItemBean item) {
+
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.item_empty;
+    }
+}
+
+```
+
+ 其中R.layout.item_empty是empty页面的布局
+
+（2）在adapter中设置ErrorProvider
+
+```
+mAdapter.setEmptyProvider(EmptyProvider.class);
+```
+通过ListViewAdapter和RecyclerAdapter的setEmptyProvider方法添加EmptyProvider，当adapter中的数据为空时会自己显示empty页面。
+
 
 4.其他主要方法
 MTSimpleAdapter中还封装了一些其他方法，用来简化针对数据以及模板类别的操作：
