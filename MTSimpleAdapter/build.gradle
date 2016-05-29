@@ -34,7 +34,7 @@ publish {
     userOrg = '253664942'//bintray.com用户名
     groupId = 'com.devilthrone'//jcenter上的路径
     artifactId = 'MTSimpleAdapter'//项目名称
-    publishVersion = '1.0.4'//版本号
+    publishVersion = '1.1.0'//版本号
     desc = 'a Simple, powerful adapter for ListView,GridView or RecyclerView'
     website = 'https://github.com/devilthrone/MTSimpleAdapter'//
 }
