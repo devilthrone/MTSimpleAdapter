@@ -8,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-
 import com.devilthrone.MTSimpleAdapter.adapter.RecyclerAdapter;
 import com.devilthrone.MTSimpleAdapter.bean.IItemBean;
 
@@ -29,6 +28,8 @@ public class RecycleActivity extends AppCompatActivity {
         mAdapter = new RecyclerAdapter(this,mList);
         mAdapter.addProvider(HeadLineProvider.class);
         mAdapter.addProvider(ConversationProvider.class);
+        mAdapter.setLoadingProvider(LoadingProvider.class);
+        mAdapter.setEmptyProvider(EmptyProvider.class);
         mRecycleView.setLayoutManager(new LinearLayoutManager(RecycleActivity.this));
         // 设置RecyclerView的点击事件
         mAdapter.setOnItemClickListener(new RecyclerAdapter.OnItemClickListener() {
@@ -73,8 +74,14 @@ public class RecycleActivity extends AppCompatActivity {
             addNewsData();
         }else if(item.getItemId() == R.id.delete){
             removeNewsData();
+        } else if (item.getItemId() == R.id.deleteAll) {
+            removeAll();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void removeAll() {
+        mAdapter.clear();
     }
     private void removeNewsData() {
         mAdapter.removeProviderAndData(ConversationProvider.class);

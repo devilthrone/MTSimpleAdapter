@@ -8,6 +8,9 @@
         android:id="@+id/delete"
         android:showAsAction="always"
         android:title="删除所有会话" />
-
+    <item
+        android:id="@+id/deleteAll"
+        android:showAsAction="always"
+        android:title="删除所有数据" />
 
 </menu>

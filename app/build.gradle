@@ -26,5 +26,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:22.2.1'
-    compile 'com.devilthrone:MTSimpleAdapter:1.0.3'
+    //compile 'com.devilthrone:MTSimpleAdapter:1.0.3'
+    compile project(':MTSimpleAdapter')
 }

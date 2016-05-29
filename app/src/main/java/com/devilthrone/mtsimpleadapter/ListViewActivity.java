@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-
 import com.devilthrone.MTSimpleAdapter.adapter.ListViewAdapter;
 import com.devilthrone.MTSimpleAdapter.bean.IItemBean;
 
@@ -15,23 +14,26 @@ import java.util.Collections;
 import java.util.List;
 
 public class ListViewActivity extends AppCompatActivity {
-    private List<IItemBean> mList;
+    private List<IItemBean> mList = new ArrayList<IItemBean>();
     private ListView mListView;
     private ListViewAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listview);
-        initData();
         mListView = (ListView) findViewById(R.id.listView);
         mAdapter = new ListViewAdapter(this,mList);
         mAdapter.addProvider(HeadLineProvider.class);
         mAdapter.addProvider(ConversationProvider.class);
+        mAdapter.setEmptyProvider(EmptyProvider.class);
+        mAdapter.setLoadingProvider(LoadingProvider.class);
         mListView.setAdapter(mAdapter);
+        mAdapter.setLoading(true);
+        initData();
+        mAdapter.setLoading(false);
     }
 
     private void initData() {
-        mList = new ArrayList<IItemBean>();
         for (int i = 0 ; i < 40;i++){
             if (i%5!=0){
                 ConversationBean bean = new ConversationBean("长江"+i+"号","看你妹","13:02");
@@ -55,9 +57,16 @@ public class ListViewActivity extends AppCompatActivity {
             addNewsData();
         }else if(item.getItemId() == R.id.delete){
             removeNewsData();
+        } else if (item.getItemId() == R.id.deleteAll) {
+            removeAll();
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private void removeAll() {
+        mAdapter.clear();
+    }
+
     private void removeNewsData() {
         mAdapter.removeProviderAndData(ConversationProvider.class);
     }
