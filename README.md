@@ -234,6 +234,7 @@ ListViewAdapter mAdapter = new ListViewAdapter(this,mList);
  因此，基于上述三方面的需求，MTSimpleAdapter做了一些常用扩展，简化了ListView和RecyclerView的开发流程，大大减少了代码量。
 
 **1. LoadingProvider(加载数据时的loading页面)**
+
 	 （1）创建LoadingProvider
 	 
 
