@@ -220,10 +220,15 @@ ListViewAdapter mAdapter = new ListViewAdapter(this,mList);
 3）.使用adapter.addProvider方法添加该Provider即可。
 
 扩展性非常强，以一种可插拔式的方式扩展或删除模板！
+
+
 4.常用扩展特性：emptyView、loadingView、errorView
 通常，我们在使用ListView和RecyclerView的时候，经常有这三方面的需求：
+
  1. 当正在加载数据时，显示一个loading页面
+
  2. 当无数据时，显示一个空页面
+ 
  3. 当获取数据网络访问出错，显示一个错误页面
  
  因此，基于上述三方面的需求，MTSimpleAdapter做了一些常用扩展，简化了ListView和RecyclerView的开发流程，大大减少了代码量。
