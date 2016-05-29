@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.devilthrone.MTSimpleAdapter.bean.IItemBean;
 import com.devilthrone.MTSimpleAdapter.provider.ViewProvider;
 import com.devilthrone.MTSimpleAdapter.viewholder.RecyclerViewHolder;
@@ -29,6 +28,8 @@ import java.util.Map;
  * Created by devilthrone on 16/4/12.
  */
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
+    protected OnItemClickListener mOnItemClickListener;
+    protected OnItemLongClickListener mOnItemLongClickListener;
     private Context mContext;
     private List<IItemBean> mDataSet;
     private List<Class<? extends ViewProvider>> mProviders;
@@ -36,8 +37,28 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     private LayoutInflater mInflater;
     private ViewProvider mViewProvider;
     private SparseArray<Integer> layoutIdList;
-    protected OnItemClickListener mOnItemClickListener;
-    protected OnItemLongClickListener mOnItemLongClickListener;
+
+    private ViewProvider mErrorProvider;
+    private ViewProvider mEmptyProvider;
+    private ViewProvider mLoadingProvider;
+    private ViewProvider DEFAULT_LOADING_PROVIDER;
+
+
+    private final int EMPTY_VIEW_TYPE = -3;
+    private final int ERROR_VIEW_TYPE = -2;
+    private final int LOADING_VIEW_TYPE = -4;
+    private final int NULL_VIEW_TYPE = -1;
+    private boolean isError = false;
+    private boolean isLoading = false;
+
+    public RecyclerAdapter(Context context) {
+        init(context, null);
+    }
+
+    public RecyclerAdapter(Context context, List<IItemBean> itemBeanList) {
+        checkParams(context, itemBeanList);
+        init(context, itemBeanList);
+    }
 
     /**
      * 设置点击事件
@@ -81,26 +102,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         });
     }
 
-    /**
-     * 点击事件Listener
-     */
-    public interface OnItemClickListener {
-        void onItemClick(int position);
-    }
-
-    public interface OnItemLongClickListener {
-        void onItemLongClick(int position);
-    }
-
-    public RecyclerAdapter(Context context) {
-        init(context, null);
-    }
-
-
-    public RecyclerAdapter(Context context, List<IItemBean> itemBeanList) {
-        checkParams(context, itemBeanList);
-        init(context, itemBeanList);
-    }
 
     /**
      * 检查参数的有效性
@@ -133,7 +134,49 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         if (!mProviders.contains(provider)) {
             mProviders.add(provider);
         }
+    }
 
+    public void setEmptyProvider(Class<? extends ViewProvider> emptyProviderClass) {
+        ViewProvider emptyProvider = null;
+        if (emptyProviderClass != null) {
+            try {
+                emptyProvider = emptyProviderClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        this.mEmptyProvider = emptyProvider;
+    }
+
+
+    public void setErrorProvider(Class<? extends ViewProvider> errorProviderClass) {
+        ViewProvider errorProvider = null;
+        if (errorProviderClass != null) {
+            try {
+                errorProvider = errorProviderClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        this.mErrorProvider = errorProvider;
+    }
+
+    public void setLoadingProvider(Class<? extends ViewProvider> loadingProviderClass) {
+        ViewProvider loadingProvider = null;
+        if (loadingProviderClass != null) {
+            try {
+                loadingProvider = loadingProviderClass.newInstance();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        this.mLoadingProvider = loadingProvider;
     }
 
     /**
@@ -164,9 +207,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == NULL_VIEW_TYPE) {
+            throw new IllegalArgumentException("Provider can not be null");
+        }
+        if (viewType == EMPTY_VIEW_TYPE) {
+            if (mEmptyProvider != null) {
+                return new RecyclerViewHolder(getView(parent, mEmptyProvider.getLayoutId()));
+            }
+        } else if (viewType == ERROR_VIEW_TYPE) {
+            if (mErrorProvider != null) {
+                return new RecyclerViewHolder(getView(parent, mErrorProvider.getLayoutId()));
+            }
+        } else if (viewType == LOADING_VIEW_TYPE) {
+            if (mLoadingProvider != null) {
+                return new RecyclerViewHolder(getView(parent, mLoadingProvider.getLayoutId()));
+            }
+        }
         int itemLayoutId = layoutIdList.get(viewType);
-        if(itemLayoutId < 0){
-            throw  new IllegalArgumentException("itemLayoutId return not null");
+        if (itemLayoutId < 0) {
+            throw new IllegalArgumentException("itemLayoutId return not null");
         }
         return new RecyclerViewHolder(getView(parent, itemLayoutId));
     }
@@ -179,34 +238,66 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
      * @return
      */
     protected View getView(ViewGroup viewGroup, int layoutId) {
-        Context context = viewGroup.getContext();
-        return LayoutInflater.from(context).inflate(layoutId,
+        return mInflater.inflate(layoutId,
                 viewGroup, false);
     }
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        IItemBean itemBean = mDataSet.get(position);
-        ViewProvider viewProvider = mCacheMap.get(itemBean.getViewProviderClass().getName());
-        if(viewProvider!=null){
-            viewProvider.bindView(mContext, holder, position, itemBean);
+        if (getItemViewType(position) == EMPTY_VIEW_TYPE) {
+            if (mEmptyProvider != null) {
+                mEmptyProvider.bindView(mContext, holder, position, null);
+            }
+        } else if (getItemViewType(position) == ERROR_VIEW_TYPE) {
+            if (mErrorProvider != null) {
+                mErrorProvider.bindView(mContext, holder, position, null);
+            }
+        } else if (getItemViewType(position) == LOADING_VIEW_TYPE) {
+            if (mLoadingProvider != null) {
+                mLoadingProvider.bindView(mContext, holder, position, null);
+            }
+        } else {
+            IItemBean itemBean = mDataSet.get(position);
+            ViewProvider viewProvider = mCacheMap.get(itemBean.getViewProviderClass().getName());
+            if (viewProvider != null) {
+                viewProvider.bindView(mContext, holder, position, itemBean);
+            }
+            setupItemClickListener(holder, position);
+            setupItemLongClickListener(holder, position);
         }
-        setupItemClickListener(holder, position);
-        setupItemLongClickListener(holder, position);
+
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (mDataSet == null || position < 0 || position >= mDataSet.size()) {
-            return 0;
+        if (position < mDataSet.size()) {
+            return getCommonViewType(position);
+        } else if (isLoading()) {
+            if (mLoadingProvider != null)
+                return LOADING_VIEW_TYPE;
+        } else if (isEmpty()) {
+            if (isLoading()) {
+                if (mLoadingProvider != null)
+                    return LOADING_VIEW_TYPE;
+            } else {
+                if (mEmptyProvider != null)
+                    return EMPTY_VIEW_TYPE;
+            }
+        } else if (isError()) {
+            if (mErrorProvider != null)
+                return ERROR_VIEW_TYPE;
         }
+        throw new RuntimeException("unknown item view type for position:" + position);
+    }
+
+    private int getCommonViewType(int position) {
         IItemBean item = mDataSet.get(position);
         if (item.getViewProviderClass() == null) {
             throw new IllegalArgumentException("ItemBean implements method getViewProvider() return not null");
         }
         String viewProviderName = item.getViewProviderClass().getName();
         ViewProvider viewProvider = mCacheMap.get(viewProviderName);
-        if(viewProvider != null){
+        if (viewProvider != null) {
             int index = mProviders.indexOf(viewProvider.getClass());
             layoutIdList.put(index, viewProvider.getLayoutId());
             return index;
@@ -228,11 +319,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
                 }
             }
         }
-        if(viewProvider == null){
+        if (viewProvider == null) {
             throw new IllegalArgumentException(viewProviderName + " not add this provider");
         }
 
-        return 0;
+        return NULL_VIEW_TYPE;
+    }
+
+    public boolean isLoading() {
+        return isLoading;
+    }
+
+    public void setLoading(boolean isLoading) {
+        this.isLoading = isLoading;
+        notifyDataSetChanged();
     }
 
     /**
@@ -244,7 +344,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
         mDataSet.add(item);
         notifyDataSetChanged();
     }
-
 
     /**
      * 追加数据集
@@ -316,6 +415,34 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
     @Override
     public int getItemCount() {
-        return mDataSet.size();
+        int count = 0;
+        if (isEmpty() || isError() || isLoading()) {
+            count++;
+        }
+        return mDataSet.size() + count;
+    }
+
+    public void setError() {
+        isError = true;
+        notifyDataSetChanged();
+    }
+
+    public boolean isEmpty() {
+        return mDataSet.size() == 0;
+    }
+
+    public boolean isError() {
+        return isError;
+    }
+
+    /**
+     * 点击事件Listener
+     */
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
+
+    public interface OnItemLongClickListener {
+        void onItemLongClick(int position);
     }
 }
