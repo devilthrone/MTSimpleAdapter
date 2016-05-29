@@ -288,7 +288,7 @@ mAdapter.setEmptyProvider(EmptyProvider.class);
 通过ListViewAdapter和RecyclerAdapter的setEmptyProvider方法添加EmptyProvider，当adapter中的数据为空时会自己显示empty页面。
 
 
-4.其他主要方法
+5.其他主要方法
 MTSimpleAdapter中还封装了一些其他方法，用来简化针对数据以及模板类别的操作：
 
 > **addProvider**方法：添加一种Provider模板类别
